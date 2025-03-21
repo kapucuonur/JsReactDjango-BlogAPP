@@ -17,6 +17,3 @@ frontend/node_modules/
 # Static files
 backend/static/*
 !backend/static/.gitkeep
-
-staticfiles/*
-!staticfiles/.gitkeep
