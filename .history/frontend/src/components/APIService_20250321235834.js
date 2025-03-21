@@ -1,5 +1,5 @@
 // Define the base URL
-const BASE_URL = 'https://jsreactdjango-blogapp.onrender.com/api/';
+const BASE_URL = '/api/';
 
 export default class APIService {
     static UpdateArticle(article_id, body, token) {

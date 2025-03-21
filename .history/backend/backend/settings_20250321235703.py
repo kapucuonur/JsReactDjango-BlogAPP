@@ -148,9 +148,7 @@ CORS_ALLOW_HEADERS = [
 STATIC_URL = '/static/'
 
 # Dynamically check and add static directories
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'frontend/build/static'),
-]
+STATICFILES_DIRS = []
 
 # Check and add backend static directory if it exists
 # backend_static_dir = os.path.join(BASE_DIR, 'backend', 'static')
