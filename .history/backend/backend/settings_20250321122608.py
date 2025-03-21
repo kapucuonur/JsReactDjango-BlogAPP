@@ -57,10 +57,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'backend/static'),
-            os.path.join(BASE_DIR, 'frontend/build'),
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'backend/static')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,6 +73,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 
+# Database
+# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+
+
+
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL'),
@@ -84,6 +86,9 @@ DATABASES = {
     )
 }
 
+
+# Password validation
+# https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -100,6 +105,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+# Internationalization
+# https://docs.djangoproject.com/en/4.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -148,7 +156,7 @@ CORS_ALLOW_HEADERS = [
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'backend/static'),
-    os.path.join(BASE_DIR, 'frontend/build/static'), # Add this line
+    os.path.join(BASE_DIR, 'staticfiles'),  # Add this line
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 

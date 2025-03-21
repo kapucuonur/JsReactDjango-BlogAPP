@@ -18,7 +18,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 #DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 # settings.py
 DEBUG = False
-ALLOWED_HOSTS = ['jsreactdjango-blogapp.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['jsreactdjango-blogapp.onrender.com']
 CORS_ALLOWED_ORIGINS = [
     "https://jsreactdjango-blogapp.onrender.com",
 ]
@@ -36,13 +36,12 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'core',
-    
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -57,10 +56,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'backend/static'),
-            os.path.join(BASE_DIR, 'frontend/build'),
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'static')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,6 +72,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 
+# Database
+# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+
+
+
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL'),
@@ -84,6 +85,9 @@ DATABASES = {
     )
 }
 
+
+# Password validation
+# https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -101,6 +105,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# Internationalization
+# https://docs.djangoproject.com/en/4.0/topics/i18n/
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -111,6 +118,14 @@ USE_TZ = True
 
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.0/howto/static-files/
+
+#STATIC_URL = 'static/'
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #REST Framework ayarları
@@ -144,13 +159,10 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-# Static Files Configuration
+# settings.py
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'backend/static'),
-    os.path.join(BASE_DIR, 'frontend/build/static'), # Add this line
+    os.path.join(BASE_DIR, 'static')
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Whitenoise Configuration
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

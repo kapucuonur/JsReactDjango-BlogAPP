@@ -15,8 +15,8 @@ frontend/build/
 frontend/node_modules/
 
 # Static files
+backend/static/
 backend/static/*
-!backend/static/.gitkeep
 
 # Misc
 .DS_Store
