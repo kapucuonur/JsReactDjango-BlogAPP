@@ -3,18 +3,28 @@ from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
 
-# Load environment variables from a .env file
 load_dotenv()
-
-# Base directory of the project
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Security settings
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+#DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+# settings.py
+DEBUG = False
 ALLOWED_HOSTS = ['jsreactdjango-blogapp.onrender.com', 'localhost', '127.0.0.1']
+CORS_ALLOWED_ORIGINS = [
+    "https://jsreactdjango-blogapp.onrender.com",
+]
 
 # Application definition
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -25,8 +35,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    'storages',  # For AWS S3
     'core',
+    
+
 ]
 
 MIDDLEWARE = [
@@ -64,7 +75,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-# Database configuration
+
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL'),
@@ -73,27 +84,36 @@ DATABASES = {
     )
 }
 
-# Password validation
+
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
 ]
 
-# Internationalization
+
 LANGUAGE_CODE = 'en-us'
+
 TIME_ZONE = 'UTC'
+
 USE_I18N = True
+
 USE_TZ = True
 
-# CORS settings
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_ALLOWED_ORIGINS = [
-    "https://jsreactdjango-blogapp.onrender.com",
-]
 
-# REST Framework settings
+CORS_ORIGIN_ALLOW_ALL = True
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#REST Framework ayarları
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
@@ -103,47 +123,49 @@ REST_FRAMEWORK = {
     ],
 }
 
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'frontend/build/static'),
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
 ]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# Static Files Configuration
+STATIC_URL = '/static/'
+
+# Dynamically check and add static directories
+STATICFILES_DIRS = []
+
+# Check and add backend static directory if it exists
+backend_static_dir = os.path.join(BASE_DIR, 'backend', 'static')
+if os.path.exists(backend_static_dir):
+    STATICFILES_DIRS.append(backend_static_dir)
+
+# Check and add frontend build static directory if it exists
+frontend_static_dir = os.path.join(BASE_DIR, 'frontend', 'build', 'static')
+if os.path.exists(frontend_static_dir):
+    STATICFILES_DIRS.append(frontend_static_dir)
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Whitenoise Configuration
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
-# Media files
+
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# AWS S3 configuration for media files
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
-
-# Security enhancements
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-X_FRAME_OPTIONS = 'DENY'
-
-# Logging configuration
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
-    },
-}
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
