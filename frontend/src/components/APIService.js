@@ -58,23 +58,26 @@ export default class APIService {
                 },
                 body: JSON.stringify(body)
             });
-
+    
+            const text = await response.text(); // Log response
+            console.log('Raw response:', text);
+    
             if (!response.ok) {
-                throw new Error('Login failed');
+                throw new Error(`Login failed: ${response.status} ${response.statusText}`);
             }
-
-            const data = await response.json();
-            console.log('Login success:', data);
-            if (data.token) {
-                localStorage.setItem('token', data.token); // Store token
-                return data;
-            } else {
+    
+            const data = JSON.parse(text);
+            if (!data.token) {
                 throw new Error('Token missing in response');
             }
+    
+            localStorage.setItem('token', data.token);
+            return data;
         } catch (error) {
             console.error('Login error:', error);
         }
     }
+    
 
     static async RegisterUser(body) {
         try {
