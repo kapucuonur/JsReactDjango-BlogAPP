@@ -20,3 +20,5 @@ backend/static/*
 
 staticfiles/*
 !staticfiles/.gitkeep
+
+history/
