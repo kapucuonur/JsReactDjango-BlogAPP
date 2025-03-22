@@ -1,3 +1,4 @@
+// Define the base URL
 const BASE_URL = 'https://jsreactdjango-blogapp.onrender.com/api';
 
 export default class APIService {
@@ -30,10 +31,7 @@ export default class APIService {
                 'Content-Type': 'application/json',
                 'Authorization': `Token ${token}`
             }
-        }).then(resp => {
-            if (resp.status === 204) return {}; // No Content response
-            return resp.json();
-        });
+        }).then(resp => resp.json());
     }
 
     static LoginUser(body) {

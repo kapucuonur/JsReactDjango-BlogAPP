@@ -9,14 +9,12 @@ import { useCookies } from 'react-cookie';
 
 // Define the base URL
 const BASE_URL = 'https://jsreactdjango-blogapp.onrender.com/api';
-
 function App() {
   const [articles, setArticles] = useState([]);
   const [editArticle, setEditArticle] = useState(null);
   const [token, setToken, removeToken] = useCookies(['mytoken']);
   let navigate = useNavigate();
 
-  // Fetch Articles
   useEffect(() => {
     if (!token['mytoken']) {
       console.log('No token found, redirecting to login...');
@@ -32,11 +30,8 @@ function App() {
       }
     })
       .then((resp) => {
-        if (resp.status === 401) {
-          console.log('Unauthorized, logging out...');
-          removeToken('mytoken');
-          navigate('/');
-          return;
+        if (!resp.ok) {
+          throw new Error('Unauthorized');
         }
         return resp.json();
       })
@@ -45,15 +40,6 @@ function App() {
         console.error('Error fetching articles:', error);
         setArticles([]);
       });
-  }, [token, navigate, removeToken]);
-
-  // Redirect based on token
-  useEffect(() => {
-    if (token['mytoken']) {
-      navigate('/articles');
-    } else {
-      navigate('/');
-    }
   }, [token, navigate]);
 
   const editBtn = (article) => {
@@ -61,9 +47,13 @@ function App() {
   };
 
   const updatedInformation = (article) => {
-    const new_articles = articles.map((myarticle) =>
-      myarticle.id === article.id ? article : myarticle
-    );
+    const new_articles = articles.map((myarticle) => {
+      if (myarticle.id === article.id) {
+        return article;
+      } else {
+        return myarticle;
+      }
+    });
     setArticles(new_articles);
   };
 
@@ -72,12 +62,24 @@ function App() {
   };
 
   const insertedInformation = (article) => {
-    setArticles([...articles, article]);
+    const new_articles = [...articles, article];
+    setArticles(new_articles);
   };
 
   const deleteBtn = (article) => {
-    setArticles(articles.filter((myarticle) => myarticle.id !== article.id));
+    const new_articles = articles.filter((myarticle) => myarticle.id !== article.id);
+    setArticles(new_articles);
   };
+
+  useEffect(() => {
+    const user_token = token['mytoken'];
+    console.log('User token is', user_token);
+    if (!user_token) {
+      navigate('/');
+    } else {
+      navigate('/articles');
+    }
+  }, [token, navigate]);
 
   const logoutBtn = () => {
     removeToken('mytoken');
