@@ -24,3 +24,5 @@ staticfiles/*
 history/
 .history/
 .history
+
+*.loghistory/
