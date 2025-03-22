@@ -1,12 +1,11 @@
 from rest_framework import viewsets, filters
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
-from django.contrib.auth.models import User
 from .models import Article
-from .serializers import ArticleSerializer, UserSerializer
+from .serializers import ArticleSerializer
 
 class CustomPagination(PageNumberPagination):
     page_size = 10
@@ -35,9 +34,3 @@ class ArticleViewSet(viewsets.ModelViewSet):
             return Response({'status': 'liked'})
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated, IsAdminUser]
