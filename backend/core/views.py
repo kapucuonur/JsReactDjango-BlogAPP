@@ -1,11 +1,9 @@
-from rest_framework import serializers
+# views.py
 from rest_framework import viewsets
-from .serializers import ArticleSerializer,UserSerializer
+from .serializers import ArticleSerializer, UserSerializer
 from .models import Article
 from django.contrib.auth.models import User
-
 from rest_framework.authentication import TokenAuthentication
-
 
 
 class UserViewSet(viewsets.ModelViewSet):

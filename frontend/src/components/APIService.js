@@ -43,8 +43,23 @@ export default class APIService {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(body)
-        }).then(resp => resp.json());
+        })
+        .then(resp => {
+            if (!resp.ok) {
+                console.error('Login failed:', resp.statusText);
+                throw new Error('Login failed');
+            }
+            return resp.json();
+        })
+        .then(data => {
+            console.log('Login success:', data);
+            return data;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
+    
 
     static RegisterUser(body) {
         return fetch(`${BASE_URL}/api/users/`, {
