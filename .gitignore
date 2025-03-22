@@ -22,3 +22,5 @@ staticfiles/*
 !staticfiles/.gitkeep
 
 history/
+.history/
+.history
