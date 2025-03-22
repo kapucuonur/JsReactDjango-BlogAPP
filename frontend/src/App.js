@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 // Define the base URL
-const BASE_URL = 'https://jsreactdjango-blogapp.onrender.com';
+const BASE_URL = 'https://jsreactdjango-blogapp.onrender.com' || 'http://127.0.0.1:8000 ';
 
 function App() {
   const [articles, setArticles] = useState([]);
