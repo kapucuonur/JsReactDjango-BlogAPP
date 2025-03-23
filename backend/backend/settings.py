@@ -18,7 +18,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 #DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 # settings.py
 DEBUG = False    
-ALLOWED_HOSTS = ['jsreactdjango-blogapp.onrender.com']
+ALLOWED_HOSTS = ['jsreactdjango-blogapp.onrender.com', 'localhost', '127.0.0.1']
 CORS_ALLOWED_ORIGINS = [
     "https://jsreactdjango-blogapp.onrender.com",
 ]
@@ -58,10 +58,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            #os.path.join(BASE_DIR, 'backend/static'),
-            os.path.join(BASE_DIR, '../frontend/build'),
-        ],
+       'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -114,36 +111,7 @@ USE_TZ = True
 CORS_ORIGIN_ALLOW_ALL = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-#REST Framework ayarları
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ],
-}
 
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
 
 # Static Files Configuration
 STATIC_URL = '/static/'

@@ -1,107 +1,107 @@
 import './App.css';
 import ArticleList from './components/ArticleList';
-import { useState, useEffect } from 'react';
+import {useState,useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import NavBar from './components/NavBar';
 import Form from './components/Form';
-import { useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
+import {useNavigate} from 'react-router-dom'
+import {useCookies} from 'react-cookie'
 
-// Define the base URL
-const BASE_URL = 'https://jsreactdjango-blogapp.onrender.com' || 'http://127.0.0.1:8000 ';
 
 function App() {
-  const [articles, setArticles] = useState([]);
-  const [editArticle, setEditArticle] = useState(null);
-  const [token, setToken, removeToken] = useCookies(['mytoken']);
-  let navigate = useNavigate();
+  const [articles, setArticles] = useState([])
+  const [editArticle, setEditArticle] = useState('')
+  const [token, setToken, removeToken] = useCookies(['mytoken'])
+  let navigate = useNavigate()
 
-  // Fetch Articles
-  useEffect(() => {
-    if (!token['mytoken']) {
-      console.log('No token found, redirecting to login...');
-      navigate('/');
-      return;
-    }
 
-    fetch(`${BASE_URL}/api/articles/`, {
-      method: 'GET',
-      headers: {
+  useEffect(() =>{
+    fetch('https://jsreactdjango-blogapp.onrender.com/api/articles/', {
+      method:'GET',
+      headers:{
         'Content-Type': 'application/json',
-        'Authorization': `Token ${token['mytoken']}`
+        'Authorization': 'a2a76bcaca32becedbd9fc8542dc293f9c98b92b'
       }
     })
-      .then((resp) => {
-        if (resp.status === 401) {
-          console.log('Unauthorized, logging out...');
-          removeToken('mytoken');
-          navigate('/');
-          return;
-        }
-        return resp.json();
-      })
-      .then((resp) => setArticles(resp))
-      .catch((error) => {
-        console.error('Error fetching articles:', error);
-        setArticles([]);
-      });
-  }, [token, navigate, removeToken]);
+    .then(resp => resp.json())
+    .then(resp => setArticles(resp))
+    .catch(error => console.log(error))
 
-  // Redirect based on token
-  useEffect(() => {
-    if (token['mytoken']) {
-      navigate('/articles');
-    } else {
-      navigate('/');
-    }
-  }, [token, navigate]);
+  }, [])
 
-  const editBtn = (article) => {
-    setEditArticle(article);
-  };
+  const editBtn = (article) =>{
+    setEditArticle(article)
+  }
 
   const updatedInformation = (article) => {
-    const new_articles = articles.map((myarticle) =>
-      myarticle.id === article.id ? article : myarticle
-    );
-    setArticles(new_articles);
-  };
+    const new_article = articles.map(myarticle => {
+      if(myarticle.id === article.id){
+        return article
+      }else{
+        return myarticle
+      }
+    })
+    setArticles(new_article)
+  }
 
-  const articleForm = () => {
-    setEditArticle({ title: '', description: '' });
-  };
+  const articleForm = () =>{
+    setEditArticle({title:'', description:''})
+  }
 
   const insertedInformation = (article) => {
-    setArticles([...articles, article]);
-  };
+   const new_articles = [...articles,article]
+   setArticles(new_articles)
+  }
 
-  const deleteBtn = (article) => {
-    setArticles(articles.filter((myarticle) => myarticle.id !== article.id));
-  };
+  const deleteBtn = (article) =>{
+    const new_article = articles.filter(myarticle => {
+      if(myarticle.id === article.id){
+        return false
+      }
+      
+      return true
+    })
+    setArticles(new_article)
+  }
 
-  const logoutBtn = () => {
-    removeToken('mytoken');
-  };
+
+  useEffect(()=> {
+    var user_token = token['mytoken']
+    console.log('User token is',user_token)
+    if(String(user_token) === 'undefined'){
+        navigate('/')
+    }else{
+      navigate('/articles')
+    }
+}, [token])
+
+
+const logoutBtn = () => {
+  removeToken(['mytoken'])
+
+}
+ 
+
 
   return (
     <div className="App">
-      <NavBar />
-      <br />
 
-      <div className="row">
-        <div className="col">
-          <button className="btn btn-primary" onClick={articleForm}>
-            Create Post
-          </button>
-        </div>
-      </div>
+   <NavBar />
+   <br />
 
-      <ArticleList articles={articles} editBtn={editBtn} deleteBtn={deleteBtn} />
-      <Form
-        article={editArticle}
-        updatedInformation={updatedInformation}
-        insertedInformation={insertedInformation}
-      />
+   <div className="row">
+     <div className="col">
+       <button className="btn btn-primary" onClick={articleForm}>Create Post</button>
+
+     </div>
+
+   </div>
+
+
+
+    <ArticleList articles={articles} editBtn ={editBtn}  deleteBtn ={deleteBtn}/>
+    <Form  article = {editArticle} updatedInformation= {updatedInformation} insertedInformation= {insertedInformation}/>
+  
     </div>
   );
 }

@@ -1,4 +1,4 @@
-# models.py
+from pydoc import describe
 from django.db import models
 
 class Article(models.Model):
