@@ -1,41 +1,38 @@
-import React, {useState,useEffect} from 'react'
-import {useNavigate} from 'react-router-dom'
-import {useCookies} from 'react-cookie'
-import APIService from './APIService'
-
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+import APIService from './APIService';
 
 function Login() {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [token, setToken] = useCookies(['mytoken'])
-    let navigate = useNavigate()
-    const [isLogin, setLogin] = useState(true)
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [token, setToken] = useCookies(['mytoken']);
+    const navigate = useNavigate();
+    const [isLogin, setLogin] = useState(true);
 
+    useEffect(() => {
+        const userToken = token['mytoken']; // Get token value
 
-    useEffect(()=> {
-      var user_token = token['mytoken']
-      console.log('Login User token is',user_token)
-    console.log('Data type',typeof(token['mytoken']))
-
-        if(String(user_token) === 'undefined'){
-            navigate('/')
-        }else{
-            navigate('/articles')
-          }
-
-    }, [token, navigate])
+        if (userToken) { // Check if token exists (simpler condition)
+            navigate('/articles');
+        } else {
+            navigate('/'); // Or wherever you want to redirect if not logged in
+        }
+    }, [token, navigate]);
 
     const loginBtn = () => {
-     if(username.trim().length !==0 && password.trim().length){
-         console.log('Username And Password Are Set')
-         APIService.LoginUser({username,password})
-         .then(resp => setToken('mytoken', resp.token))
-         .catch(error => console.log(error))
-     }else{
-        console.log('Username And Password Are Not Set')
-         navigate('/')
-     }
-    }
+        if (username.trim() !== '' && password.trim() !== '') {
+            APIService.LoginUser({ username, password })
+                .then(resp => {
+                    setToken('mytoken', resp.token); // Set token after successful login
+                    navigate('/articles'); // Redirect to articles after login
+                })
+                .catch(error => console.log(error));
+        } else {
+            console.log('Username and password are required.');
+            // Optionally display an error message to the user
+        }
+    };
 
 
     const RegisterBtn = () => {
@@ -68,7 +65,7 @@ function Login() {
         <div className="App">
             <div className="container-fluid">
                 <div className="row">
-                <h1 className="alert alert-danger">Learn Python Blog</h1>
+                <h1 className="alert alert-danger">Welcome to Blog</h1>
                 <br />
                 <br />
 

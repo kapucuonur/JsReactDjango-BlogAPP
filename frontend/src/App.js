@@ -1,94 +1,109 @@
 import './App.css';
 import ArticleList from './components/ArticleList';
-import { useState, useEffect } from 'react';
+import {useState,useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import NavBar from './components/NavBar';
 import Form from './components/Form';
-import { useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
+import {useNavigate} from 'react-router-dom'
+import {useCookies} from 'react-cookie'
+
 
 function App() {
-    const [articles, setArticles] = useState([]);
-    const [editArticle, setEditArticle] = useState('');
-    const [token, , removeToken] = useCookies(['mytoken']); // Removed unused `setToken`
-    let navigate = useNavigate();
+  const [articles, setArticles] = useState([])
+  const [editArticle, setEditArticle] = useState('')
+  const [token, setToken, removeToken] = useCookies(['mytoken'])
+  let navigate = useNavigate()
 
-    const baseUrl = process.env.REACT_APP_BASE_URL;
 
-    useEffect(() => {
-        fetch(`${baseUrl}/api/articles/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'a2a76bcaca32becedbd9fc8542dc293f9c98b92b'
-            }
-        })
-        .then(resp => resp.json())
-        .then(resp => setArticles(resp))
-        .catch(error => console.log(error));
-    }, [baseUrl]);
+  useEffect(() =>{
+    fetch('https://jsreactdjango-blogapp.onrender.com/api/articles/', {
+      method:'GET',
+      headers:{
+        'Content-Type': 'application/json',
+        'Authorization': 'a2a76bcaca32becedbd9fc8542dc293f9c98b92b'
+      }
+    })
+    .then(resp => resp.json())
+    .then(resp => setArticles(resp))
+    .catch(error => console.log(error))
 
-    const editBtn = (article) => {
-        setEditArticle(article);
-    };
+  }, [])
 
-    const updatedInformation = (article) => {
-        const new_article = articles.map(myarticle => {
-            if (myarticle.id === article.id) {
-                return article;
-            } else {
-                return myarticle;
-            }
-        });
-        setArticles(new_article);
-    };
+  const editBtn = (article) =>{
+    setEditArticle(article)
+  }
 
-    const articleForm = () => {
-        setEditArticle({ title: '', description: '' });
-    };
+  const updatedInformation = (article) => {
+    const new_article = articles.map(myarticle => {
+      if(myarticle.id === article.id){
+        return article
+      }else{
+        return myarticle
+      }
+    })
+    setArticles(new_article)
+  }
 
-    const insertedInformation = (article) => {
-        const new_articles = [...articles, article];
-        setArticles(new_articles);
-    };
+  const articleForm = () =>{
+    setEditArticle({title:'', description:''})
+  }
 
-    const deleteBtn = (article) => {
-        const new_article = articles.filter(myarticle => {
-            if (myarticle.id === article.id) {
-                return false;
-            }
-            return true;
-        });
-        setArticles(new_article);
-    };
+  const insertedInformation = (article) => {
+   const new_articles = [...articles,article]
+   setArticles(new_articles)
+  }
 
-    useEffect(() => {
-        var user_token = token['mytoken'];
-        console.log('User token is', user_token);
-        if (String(user_token) === 'undefined') {
-            navigate('/');
-        } else {
-            navigate('/articles');
-        }
-    }, [token, navigate]); // Added `navigate` to the dependency array
+  const deleteBtn = (article) =>{
+    const new_article = articles.filter(myarticle => {
+      if(myarticle.id === article.id){
+        return false
+      }
+      
+      return true
+    })
+    setArticles(new_article)
+  }
 
-    const logoutBtn = () => {
-        removeToken(['mytoken']);
-    };
 
-    return (
-        <div className="App">
-            <NavBar logoutBtn={logoutBtn} /> {/* Pass `logoutBtn` to NavBar */}
-            <br />
-            <div className="row">
-                <div className="col">
-                    <button className="btn btn-primary" onClick={articleForm}>Create Post</button>
-                </div>
-            </div>
-            <ArticleList articles={articles} editBtn={editBtn} deleteBtn={deleteBtn} />
-            <Form article={editArticle} updatedInformation={updatedInformation} insertedInformation={insertedInformation} />
-        </div>
-    );
+  useEffect(()=> {
+    var user_token = token['mytoken']
+    console.log('User token is',user_token)
+    if(String(user_token) === 'undefined'){
+        navigate('/')
+    }else{
+      navigate('/articles')
+    }
+}, [token, navigate])
+
+
+const logoutBtn = () => {
+  removeToken(['mytoken'])
+
+}
+ 
+
+
+  return (
+    <div className="App">
+
+   <NavBar />
+   <br />
+
+   <div className="row">
+     <div className="col">
+       <button className="btn btn-primary" onClick={articleForm}>Create Post</button>
+
+     </div>
+
+   </div>
+
+
+
+    <ArticleList articles={articles} editBtn ={editBtn}  deleteBtn ={deleteBtn}/>
+    <Form  article = {editArticle} updatedInformation= {updatedInformation} insertedInformation= {insertedInformation}/>
+  
+    </div>
+  );
 }
 
 export default App;

@@ -48,7 +48,7 @@ pip install -r requirements.txt
 python3 manage.py makemigrations
 python3 manage.py migrate
 python3 manage.py runserver
-✅ Backend will be running at: http://localhost:8000
+✅ Backend will be running at: https://jsreactdjango-blogapp.onrender.com
 
 🎨 Frontend Setup (React + Vite)
 🔹 4. Install Dependencies
@@ -58,7 +58,7 @@ npm install
 🔹 5. Configure Environment Variables
 Create a .env file in the frontend directory and set:
 
-### VITE_API_URL=http://localhost:8000
+### VITE_API_URL=https://jsreactdjango-blogapp.onrender.com
 
 🔹 6. Start the Frontend
 

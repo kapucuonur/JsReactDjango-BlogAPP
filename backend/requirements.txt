@@ -12,3 +12,4 @@ python-dotenv
 psycopg2-binary
 dj-database-url
 django-storages
+django-sslserver
