@@ -4,26 +4,18 @@ from dotenv import load_dotenv
 import dj_database_url
 
 load_dotenv()
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
-# settings.py
-DEBUG = True    
-ALLOWED_HOSTS = ['jsreactdjango-blogapp.onrender.com', 'localhost', '127.0.0.1']
-CORS_ALLOWED_ORIGINS = [
-    "https://jsreactdjango-blogapp.onrender.com",
-]
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-# Application definition
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+
+CORS_ALLOWED_ORIGINS = [
+    "https://jsreactdjango-blogapp-1.onrender.com",
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -37,9 +29,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'core',
     'sslserver',
-    
-    
-
 ]
 
 MIDDLEWARE = [
@@ -59,7 +48,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-       'DIRS': [],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,7 +63,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL'),
@@ -82,7 +70,6 @@ DATABASES = {
         conn_health_checks=True,
     )
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -99,7 +86,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -108,21 +94,11 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 CORS_ORIGIN_ALLOW_ALL = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-# Static Files Configuration
 STATIC_URL = '/static/'
-
-# # Dynamically check and add static directories
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, '../frontend/build/static'),
-# ]
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Whitenoise Configuration
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
